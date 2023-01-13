@@ -1,6 +1,3 @@
-
-/*let matrix = math.matrix([[1, 2], [3, 4]]);
-console.log(matrix);*/
 var board = [];
 var rows = 8;
 var columns = 8;
@@ -14,6 +11,10 @@ var minesFound = [];
 var tilesRevealed = 0;
 
 var gameOver = false;
+var timerOn = false;
+
+var minute = 00;
+var second = 00;
 
 window.onload = function() {
     handleGame();
@@ -32,7 +33,7 @@ function generateMines(sr, sc) {
     let cell6 = (sr+1).toString() + "-" + (sc+1).toString();
 
     let cell7 = sr.toString() + "-" + (sc-1).toString();
-    let cell8 = sr.toString() + "-" + sr.toString();
+    let cell8 = sr.toString() + "-" + sc.toString();
     let cell9 = sr.toString() + "-" + (sc+1).toString();
 
     let startPoint = [cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9];
@@ -48,7 +49,6 @@ function generateMines(sr, sc) {
             minesLeft--;
         }
     }
-    console.log("Created board, minesleft: ", minesLeft);
     console.log(minesPlace); 
 }
 
@@ -70,7 +70,6 @@ function setBoard() {
         }
         board.push(singleRow);
     }
-    console.log(board);
 }
 
 function clickCell() {
@@ -79,13 +78,14 @@ function clickCell() {
     }
 
     // Handle first cell click (start of game).
-    console.log("CLICK", this.id);
     let location = this.id.split("-");
     let r = parseInt(location[0]);
     let c = parseInt(location[1]);
-    console.log(r,c);
     if (tilesRevealed == 0) {
         generateMines(r, c);
+        // Start timer
+        timerOn = true;
+        timer();
     }
     
     
@@ -95,6 +95,7 @@ function clickCell() {
             let cell = board[r][c];
             cell.innerText = "💣";
             cell.style.backgroundColor = "red";
+            timerOn = false;
             gameOver = true;
         }
         else {
@@ -115,7 +116,6 @@ function revealCell(r, c) {
 
     board[r][c].classList.add("cell-clicked");
     tilesRevealed++;
-    console.log(tilesRevealed, rows*columns - mineCount);
 
     let adjBombCount = 0;
 
@@ -137,7 +137,6 @@ function revealCell(r, c) {
         board[r][c].innerText = adjBombCount;
         board[r][c].style.backgroundColor = "white";
         board[r][c].classList.add("adjMines" +adjBombCount.toString());
-        console.log(board[r][c]);
     }
     else {
         //board[r][c].innerText = adjBombCount;
@@ -162,6 +161,7 @@ function revealCell(r, c) {
 
     if (tilesRevealed == rows*columns - mineStartCount) {
         document.getElementById("mineCount").innerText = "Completed";
+        timerOn = false
         gameOver = true;
     }
 
@@ -203,20 +203,13 @@ function revealAdjCells(r, c) {
 
         let bombCount = revealCell(x, y);
 
-        console.log(position, bombCount);
         bombCountList.push(bombCount);
 
         adjList[i].innerText = bombCount;
         adjList[i].style.backgroundColor = "white";
-        //console.log("POS (", position, "), ", bombCount);
     } 
-    //cell1.id.replace("-","")
     console.log(adjList);
     console.log(bombCountList);
-    /*    cell.innerText = "💣";
-        cell.style.backgroundColor = "red"; */
-
-
 }
 
 
@@ -247,9 +240,6 @@ function placeFlag() {
         mineCount--;
         document.getElementById("mineCount").innerText = "Mine Count: " + mineCount;
     }
-
-    console.log(this.id);
-    
 }
 
 function handleGame() {
@@ -264,9 +254,38 @@ function playAgain() {
     minesFound = [];
     mineCount = 10;
     tilesRevealed = 0;
+    minute = 00;
+    second = 00;
+    timerOn = false;
     gameOver = false;
 
+    document.getElementById("sec").innerText = "00";
+    document.getElementById("min").innerHTML = "00";
     document.getElementById("mineCount").innerText = "Mine Count " + mineStartCount; 
     document.getElementById("board").innerHTML = "";
     handleGame();
+}
+
+function timer() {
+    if (timerOn) {
+        second++;
+        if (second == 60) {
+            minute++;
+            second = 0;
+        }
+
+        let minString = minute;
+        let secString = second;
+
+        if (minute < 10) {
+            minString = "0" + minString;
+        }
+        if (second < 10) {
+            secString = "0" + secString;
+        }
+
+        document.getElementById("min").innerHTML = minString;
+        document.getElementById("sec").innerHTML = secString;
+        setTimeout(timer, 1000);
+    }
 }
