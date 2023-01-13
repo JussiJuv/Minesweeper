@@ -1,3 +1,4 @@
+
 /*let matrix = math.matrix([[1, 2], [3, 4]]);
 console.log(matrix);*/
 var board = [];
@@ -16,6 +17,7 @@ var gameOver = false;
 
 window.onload = function() {
     handleGame();
+    document.getElementById("playAgain").addEventListener("click", playAgain);
 }
 
 // Generating a board, where start position has no adjancent mines
@@ -134,10 +136,15 @@ function revealCell(r, c) {
     if (adjBombCount > 0) {
         board[r][c].innerText = adjBombCount;
         board[r][c].style.backgroundColor = "white";
+        board[r][c].classList.add("adjMines" +adjBombCount.toString());
+        console.log(board[r][c]);
     }
     else {
-        board[r][c].innerText = adjBombCount;
-        board[r][c].style.backgroundColor = "blue";
+        //board[r][c].innerText = adjBombCount;
+        //board[r][c].style.backgroundColor = "blue";
+        board[r][c].innerText = "";
+        board[r][c].style.backgroundColor = "white";
+
         // Check top 3 cells
         adjBombCount += revealCell(r-1, c-1);
         adjBombCount += revealCell(r-1, c);
@@ -246,6 +253,20 @@ function placeFlag() {
 }
 
 function handleGame() {
-    //generateMines();
     setBoard();
+}
+
+function playAgain() {
+    console.log("**********NEW GAME***********");
+    board = [];
+    minesPlace = [];
+    placedFlags = []; 
+    minesFound = [];
+    mineCount = 10;
+    tilesRevealed = 0;
+    gameOver = false;
+
+    document.getElementById("mineCount").innerText = "Mine Count " + mineStartCount; 
+    document.getElementById("board").innerHTML = "";
+    handleGame();
 }

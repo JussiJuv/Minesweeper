@@ -2,6 +2,7 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
     text-align: center;
+    background-color: rgb(27, 27, 32);
 }
 
 #board {
@@ -17,7 +18,7 @@ body {
 #board div {
     width: 48px;
     height: 48px;
-    border: 1px solid black;
+    border: 1px solid rgb(110, 110, 110);
     background-color: lightgray;
 
     /* text */
@@ -25,4 +26,52 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+#mineCount {
+    color: white;
+}
+
+#playAgain {
+    border-radius: 10px;
+    background-color: lightgray;
+    color: black;
+    width: 120px;
+    height: 100px;
+    font-size: 32px;
+    float: right;
+}
+
+#playAgain:hover {
+    background-color: rgb(176, 176, 196);
+    transition-duration: 0.5s;
+}
+
+button:active {
+    transform: translateY(4px);
+}
+
+.adjMines1 {
+    color: blue;
+}
+.adjMines2 {
+    color: green;
+}
+.adjMines3 {
+    color: red;
+}
+.adjMines4 {
+    color: darkblue;
+}
+.adjMines5 {
+    color: darkred;
+}
+.adjMines6 {
+    color: teal;
+}
+.adjMines7 {
+    color: purple;
+}
+.adjMines8 {
+    color: black;
 }
